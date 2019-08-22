@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	dbm "github.com/tendermint/tm-db"
+	dbm "github.com/orientwalt/tendermint/libs/db"
 )
 
 // ImmutableTree is a container for an immutable AVL+ ImmutableTree. Changes are performed by

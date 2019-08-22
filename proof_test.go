@@ -7,8 +7,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	cmn "github.com/orientwalt/iavl/common"
 	"github.com/tendermint/go-amino"
-	cmn "github.com/tendermint/iavl/common"
 	db "github.com/tendermint/tm-db"
 )
 

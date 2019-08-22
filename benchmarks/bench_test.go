@@ -7,7 +7,7 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/tendermint/iavl"
+	"github.com/orientwalt/iavl"
 	db "github.com/tendermint/tm-db"
 )
 
