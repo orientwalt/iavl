@@ -270,7 +270,7 @@ func (tree *MutableTree) LoadVersionForOverwriting(targetVersion int64) (int64, 
 	if err != nil {
 		return latestVersion, err
 	}
-	tree.deleteVersionsFrom(targetVersion+1)
+	tree.deleteVersionsFrom(targetVersion + 1)
 	return targetVersion, nil
 }
 
@@ -397,7 +397,8 @@ func (tree *MutableTree) deleteVersionsFrom(version int64) error {
 			return cmn.NewError("cannot delete latest saved version (%d)", version)
 		}
 		if _, ok := tree.versions[version]; !ok {
-			return cmn.ErrorWrap(ErrVersionDoesNotExist, "")
+			// return cmn.ErrorWrap(ErrVersionDoesNotExist, "")
+			continue // continue to delete other version
 		}
 		tree.ndb.DeleteVersion(version, false)
 		delete(tree.versions, version)
@@ -500,4 +501,23 @@ func (tree *MutableTree) addOrphans(orphans []*Node) {
 		}
 		tree.orphans[string(node.hash)] = node.version
 	}
+}
+
+// Reset delete all the tree version from disk specified.
+func (tree *MutableTree) Reset() error {
+	_, err := tree.LoadVersion(tree.ndb.latestVersion)
+	if err != nil {
+		return err
+	}
+	lastestVersion := tree.ndb.getLatestVersion()
+	for version := int64(0); version <= lastestVersion; version++ {
+		if _, ok := tree.versions[version]; !ok {
+			//return cmn.ErrorWrap(ErrVersionDoesNotExist, "")
+			continue
+		}
+		tree.ndb.DeleteVersion(version, false)
+		delete(tree.versions, version)
+	}
+	tree.ndb.Commit()
+	return nil
 }
